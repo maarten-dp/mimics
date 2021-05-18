@@ -6,7 +6,7 @@ Stasis is a small tool with the intention to defer actions done on objects or cl
 
 When you find yourself in a chicken-and-egg situation within your own code, I would probably attribute this to bad design, and advise you to rethink your project structure.
 
-Sometimes, though, when working with 3rd party libraries, you just don't have the choice, and the design of one library does not mesh with one another.
+Sometimes, though, when working with 3rd party libraries, you just don't have the choice, and the design of one library does not mesh with that of another.
 
 # Quickstart
 
