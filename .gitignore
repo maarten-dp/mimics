@@ -1,0 +1,36 @@
+*.csv
+run.sh
+recreate_db.sh
+node_modules
+*.cache
+__pycache__
+.coverage
+htmlcov
+*.pyc
+*.swp
+AUTHORS
+ChangeLog
+tables.csv
+.pytest_cache/
+*.png
+# Pyenv
+.python-version
+# Autoenv
+.env
+# Direnv
+.envrc
+# PyCharm
+.idea
+
+# Distribution / packaging
+*.egg-info/
+*.eggs/
+
+# Macos
+*.DS_Store
+
+# Celery
+celerybeat-schedule.*
+
+# pytest-profiling
+prof/
