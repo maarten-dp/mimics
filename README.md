@@ -15,7 +15,7 @@ The usage should be pretty straightforward, basically you "trap" the object you 
 ```python
 from stasis import StasisTrap
 
-trap = StasisTrap
+trap = StasisTrap()
 
 my_number = trap.suspend(4)
 result = my_number + 5
