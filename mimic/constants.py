@@ -39,4 +39,5 @@ MAGIC_METHODS = [
     '__ne__',
     '__ge__',
     '__gt__',
+    '__hash__',
 ]

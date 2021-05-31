@@ -1,4 +1,4 @@
-from stasis import StasisTrap
+from mimic import StasisTrap
 import pytest
 
 

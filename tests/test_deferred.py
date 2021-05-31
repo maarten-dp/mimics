@@ -2,7 +2,7 @@ import operator
 
 import pytest
 
-from stasis import Deferred, TrueSight, Recorder
+from mimic import Deferred, TrueSight, Recorder, Mimic
 
 
 def test_it_can_defer_a_funtion_call(trap):
@@ -140,9 +140,30 @@ def test_it_can_defer_operators(trap, op, result):
     assert result == result
 
 
+@pytest.mark.skip("Have a look at this later")
 def test_it_can_defer_operation_assignments(trap):
     my_number = 4
     my_number = trap.suspend(my_number)
     my_number += 5
     trap.release(my_number)
     assert my_number == 9
+
+
+def test_a_mimic_can_solve_chicken_and_egg():
+    class A:
+        def __init__(self, b):
+            self.b = b
+
+
+    class B:
+        def __init__(self, a):
+            self.a = a
+
+    mimic = Mimic()
+    husk = mimic.husk()
+    b = B(husk)
+    a = A(b)
+    mimic.absorb(husk).as_being(a)
+
+    assert b.a == a
+    assert a.b == b
