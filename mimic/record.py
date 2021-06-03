@@ -26,12 +26,6 @@ def record(fn):
     return decorator
 
 
-def clean(action):
-    if action == '__getattr__':
-        return '__getattribute__'
-    return action
-
-
 class Record:
     def __init__(self, deferred, action, args, kwargs, return_deferred):
         action_handlers = {
@@ -40,8 +34,8 @@ class Record:
         }
 
         self.deferred = deferred
-        self.action = clean(action)
-        self.handler = action_handlers.get(clean(action), self._handle_default)
+        self.action = action
+        self.handler = action_handlers.get(action, self._handle_default)
         self.args = args
         self.kwargs = kwargs
         self.return_deferred = TrueSight(return_deferred)

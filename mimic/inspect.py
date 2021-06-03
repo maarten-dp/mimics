@@ -6,16 +6,9 @@ WHITELISTED = [
     "recorder",
     "subject",
     "suspended",
-    "acting_as",
     "cache",
-    "metadata",
-    "_init_as_class",
     "_init_as_instance"
 ]
-
-
-
-from functools import wraps, partialmethod
 
 
 def accessible(fn):
@@ -23,14 +16,6 @@ def accessible(fn):
     def decorator(self, *args, **kwargs):
         return fn(TrueSight(self), *args, **kwargs)
     return decorator
-
-
-def reroute_wrapper(fn):
-    @wraps(fn)
-    def decorator(self, *args, **kwargs):
-        return fn(*args, **kwargs)
-    return decorator
-
 
 
 class TrueSight:
@@ -57,34 +42,40 @@ class TrueSight:
 
 
 def shape_shift(target, destination):
-    from .deferred import UncallableDeferred
-
     if not TrueSight(destination).is_deferred_object():
         return
-
-    def raise_error(*a, **kw):
-        raise AttributeError()
 
     def reroute(member, subject):
         def decorator(self, *args, **kwargs):
             return getattr(subject, member)(*args, **kwargs)
         return decorator
 
+    def reroute_to_fn(fn):
+        def decorator(self, *args, **kwargs):
+            return fn(target, *args, **kwargs)
+        return decorator
+
+    def reroute_direct(fn):
+        def decorator(self, *args, **kwargs):
+            return fn(*args, **kwargs)
+        return decorator
+
     methods = {}
     candidate = target.__class__
     if inspect.isclass(target):
         candidate = target
-        methods['__call__'] = lambda s, *a, **kw: target(*a, **kw)
-        methods['__instancecheck__'] = lambda s, *a, **kw: target.__instancecheck__(*a, **kw)
-    members = dict(inspect.getmembers(candidate))
+        methods['__call__'] = reroute_direct(target)
+        methods['__instancecheck__'] = reroute_direct(target.__instancecheck__)
 
+    members = dict(inspect.getmembers(candidate))
     for member_name, member in members.items():
         if callable(member):
             methods[member_name] = reroute(member_name, target)
-    methods['__getattr__'] = lambda s, *a, **kw: getattr(target, *a, **kw)
-    methods['__getattribute__'] = raise_error
-    methods['__repr__'] = lambda s, *a, **kw: repr(target, *a, **kw)
-    methods['__str__'] = lambda s, *a, **kw: str(target, *a, **kw)
-    methods['__setattr__'] = lambda s, *a, **kw: setattr(target, *a, **kw)
+
+    methods['__getattribute__'] = reroute_to_fn(getattr)
+    methods['__repr__'] = reroute_to_fn(repr)
+    methods['__str__'] = reroute_to_fn(str)
+    methods['__setattr__'] = reroute_to_fn(setattr)
+
     Proxy = type('Proxy', tuple(), methods)
     destination.__class__ = Proxy
