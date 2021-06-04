@@ -6,7 +6,7 @@ When you find yourself in a chicken-and-egg situation within your own code, it's
 If this is the case, it's probably advisable to rethink your project structure.
 
 Sometimes, though, when working with 3rd party libraries, you just don't have the choice, and the design of one library does not mesh with that of another.
-Out of spite (I'm looking at you <insert most libraries that require an initialized instance to define global decorators>), I started writing this library so that I had control over "when" I initialized "what", while being able to do it in a controlled local scope without losing the ability to use global definitions.
+Out of spite (I'm looking at you \<insert most libraries that require an initialized instance to define global decorators\>), I started writing this library so that I had control over "when" I initialized "what", while being able to do it in a controlled local scope without losing the ability to use global definitions.
   
 BIG FAT DISCLAIMER: I wouldn't use this lib in production code, not in its current state at least :) It needs some more battle testing before I can comfortably say it's stable. Feel free to contribute to this battle testing.
 
