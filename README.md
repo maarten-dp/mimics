@@ -33,7 +33,7 @@ assert result == 5
 ```
 
 # A more elaborate example
-This example won't make much sense, as Flask-SQLAlchemy plays quite nicely when it comes to having control over the local scope while still performing global actions, but I thought it was a nice example of what the library is capable of. Here we'll defer the creation, initialization and persisting of an SQLAlchemy model. Then then play it when it suits us best.
+This example won't make much sense, as Flask-SQLAlchemy plays quite nicely when it comes to having control over the local scope while still performing global actions, but I thought it was a nice example of what the library is capable of. Here we'll defer the creation, initialization and persisting of an SQLAlchemy model. Then play it when it suits us best.
 
 ```python
 # Make the handler and deferred object
