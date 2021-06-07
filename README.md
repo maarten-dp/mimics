@@ -8,28 +8,63 @@ If this is the case, it's probably advisable to rethink your project structure.
 Sometimes, though, when working with 3rd party libraries, you just don't have the choice, and the design of one library does not mesh with that of another.
 Out of spite (I'm looking at you \<insert most libraries that require an initialized instance to define global decorators\>), I started writing this library so that I had control over "when" I initialized "what", while being able to do it in a controlled local scope without losing the ability to use global definitions.
   
-BIG FAT DISCLAIMER: I wouldn't use this lib in production code, not in its current state at least :) It needs some more battle testing before I can comfortably say it's stable. Feel free to contribute to this battle testing.
+**BIG FAT DISCLAIMER**: I wouldn't use this lib in production code, not in its current state at least :) It needs some more battle testing before I can comfortably say it's stable. Feel free to contribute to this battle testing.
 
 # Quickstart
 
-The usage should be pretty straightforward, basically you "trap" the object you want to defer, and "release" it at a later date. To do this, you'll need the SasisTrap as followed:
+The core of this library is the `Deferred` object, that basically behaves as a mock object. The only difference is that the `Deferred` object does not have reserved names, so you can do literally **__any__** operation on it.
+
+Of course, that means that you, the user, won't be able to use this deferred object as the driver. For this we'll need a handler object that set things in motion, and ties things together when needed.
 
 ```python
-from mimic import StasisTrap
+from mimic import Mimic
 
-trap = StasisTrap()
+# Make the handler object
+mimic = Mimic()
+# Make a deferred object using the factory on the handler object
+husk = mimic.husk()
 
-my_number = trap.suspend(4)
-result = my_number + 5
+# Do the deferred operations you want to do
+result = husk + 3
 
-print(my_number) # <mimic.trap.Deferred object at 0x7fe41a971c18>
-print(result) # <mimic.trap.Deferred object at 0x7fe41a971cc0>
+# Replay anything done on the deferred object
+mimic.absorb(husk).as_being(5)
+assert result == 5
+```
 
-trap.release(my_number)
+# A more elaborate example
+This example won't make much sense, as Flask-SQLAlchemy plays quite nicely when it comes to having control over the local scope while still performing global actions, but I thought it was a nice example of what the library is capable of. Here we'll defer the creation, initialization and persisting of an SQLAlchemy model. Then then play it when it suits us best.
 
-print(my_number) # 4
-print(result) # 9
+```python
+# Make the handler and deferred object
+mimic = Mimic()
+husk = mimic.husk()
 
+# Defer the making of an SQLA model using the deferred object
+class MyModel(husk.Model):
+    id = husk.Column(husk.Integer, primary_key=True)
+    name = husk.Column(husk.String(255), nullable=False, unique=True)
+
+# Defer the db creation 
+husk.create_all()
+# Defer the initialization and persisting of an instance
+my_model = MyModel(name="test")
+husk.session.add(my_model)
+husk.session.commit()
+
+# Make the actual SQLA db object
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Replay deferred actions as being the db
+mimic.absorb(husk).as_being(db)
+
+# Verify it worked
+models = MyModel.query.all()
+assert len(models) == 1
+assert models[0].name == "test"
 ```
 
 # Pitfalls
