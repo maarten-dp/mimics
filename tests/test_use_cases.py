@@ -1,14 +1,15 @@
-from mimic import Mimic
+from mimics import Mimic
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 
 def test_vanilla_celery(celery_app, celery_worker):
-    # Vanilla celery test as found at 
+    # Vanilla celery test as found at
     # https://docs.celeryproject.org/en/stable/userguide/testing.html#fixtures
     @celery_app.task
     def mul(x, y):
         return x * y
+
     celery_worker.reload()
 
     assert mul.delay(4, 4).get(timeout=10) == 16
@@ -43,8 +44,8 @@ def test_it_can_mimic_flask_sqlalchemy():
     husk.session.commit()
 
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db = SQLAlchemy(app)
 
     mimic.absorb(husk).as_being(db)

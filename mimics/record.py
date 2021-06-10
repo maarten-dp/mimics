@@ -1,4 +1,3 @@
-from inspect import isclass
 from functools import wraps
 
 from .inspect import TrueSight, shape_shift, WHITELISTED
@@ -20,17 +19,17 @@ def record(fn):
         ensure_truesight(fn.__name__, *args, **kwargs)
         if self.suspended:
             record = Record(self, fn.__name__, args, kwargs, return_deferred)
-            print(f"recording {fn.__name__}: {args} -- {kwargs}")
             self.recorder.record(record)
         return return_deferred
+
     return decorator
 
 
 class Record:
     def __init__(self, deferred, action, args, kwargs, return_deferred):
         action_handlers = {
-            '__call__': self._handle_call,
-            'subclassed': self._handle_subclass
+            "__call__": self._handle_call,
+            "subclassed": self._handle_subclass,
         }
 
         self.deferred = deferred
@@ -45,9 +44,11 @@ class Record:
         return self.deferred.subject
 
     def perform(self):
-        print(f"playing {self.action}: {self.subject} || {self.args} -- {self.kwargs}")
         result = self.handler()
-        if hasattr(self.return_deferred, 'is_deferred_object') and self.return_deferred.is_deferred_object():
+        if (
+            hasattr(self.return_deferred, "is_deferred_object")
+            and self.return_deferred.is_deferred_object()
+        ):
             self.return_deferred.subject = result
             shape_shift(self.return_deferred.subject, self.return_deferred.obj)
 

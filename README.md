@@ -7,7 +7,7 @@ If this is the case, it's probably advisable to rethink your project structure.*
 
 Sometimes, though, when working with 3rd party libraries, you just don't have the choice, and the design of one library does not mesh with that of another.
 Out of spite (I'm looking at you \<insert most libraries that require an initialized instance to define global scoped decorators\>), I started writing this library so that I had control over "when" I initialized "what", while being able to do it in a controlled local scope without losing the ability to use global definitions.
-  
+
 **BIG FAT DISCLAIMER**: I wouldn't use this lib in production code, not in its current state at least :) It needs some more battle testing before I can comfortably say it's stable. Feel free to contribute to this battle testing.
 
 # Quickstart
@@ -17,7 +17,7 @@ The core of this library is the `Deferred` object, that basically behaves like a
 Of course, that means that you, the user, won't be able to use this deferred object as the driver. For this we'll need a handler object that set things in motion, and ties things together when needed.
 
 ```python
-from mimic import Mimic
+from mimics import Mimic
 
 # Make the handler object
 mimic = Mimic()
@@ -49,7 +49,7 @@ class MyModel(husk.Model):
     id = husk.Column(husk.Integer, primary_key=True)
     name = husk.Column(husk.String(255), nullable=False, unique=True)
 
-# Defer the db creation 
+# Defer the db creation
 husk.create_all()
 # Defer the initialization and persisting of an instance
 my_model = MyModel(name="test")
@@ -91,7 +91,7 @@ While it may look like you're interacting with the subject itself, you'll always
 ## The Deferred object's limits
 It's important to note that only operations performed ***on*** deferred objects are allowed. Performing operations ***with*** deferred objects will go horribly wrong.
 
-For instance 
+For instance
 ```python
 husk = Mimic().husk()
 result = 5 + husk

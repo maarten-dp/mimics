@@ -1,0 +1,7 @@
+celery==5.0.5
+Flask-SQLAlchemy==2.5.1
+pre-commit==2.13.0
+pytest==6.2.4
+pytest-celery==0.0.0
+pytest-cov
+pbr>=3.0

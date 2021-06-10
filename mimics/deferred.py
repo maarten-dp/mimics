@@ -1,10 +1,8 @@
-from functools import wraps, partialmethod
-import inspect
-from enum import Enum
+from functools import wraps
 
 from .inspect import TrueSight, accessible
 from .constants import MAGIC_METHODS
-from .record import record, Recorder, Record
+from .record import record, Record
 
 
 def reroute_or_defer(fn):
@@ -13,6 +11,7 @@ def reroute_or_defer(fn):
         if not self.suspended:
             return getattr(self.subject, fn)(*args, **kwargs)
         return Deferred(self.recorder)
+
     decorator.__name__ = fn
     return accessible(record(decorator))
 
@@ -21,7 +20,7 @@ class DeferredMeta(type):
     def __new__(cls, name, bases, attrs):
         overload = {mm: reroute_or_defer(mm) for mm in MAGIC_METHODS}
         overload.update(attrs)
-        return super().__new__(cls,name, bases, overload)
+        return super().__new__(cls, name, bases, overload)
 
 
 class Deferred(metaclass=DeferredMeta):
@@ -42,7 +41,7 @@ class Deferred(metaclass=DeferredMeta):
 
     @accessible
     def __init__(self, *args, **kwargs):
-        if not hasattr(self, 'recorder'):
+        if not hasattr(self, "recorder"):
             self._init_as_instance(*args, **kwargs)
 
     @accessible

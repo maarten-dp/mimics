@@ -7,6 +7,7 @@ class StasisTrap:
     """
     Used for deferring a known object or class
     """
+
     def __init__(self):
         self.recorders = {}
 
@@ -27,6 +28,7 @@ class Mimic:
     """
     Used for deferring an unknown object or class
     """
+
     def __init__(self):
         self.recorders = {}
 
@@ -45,6 +47,7 @@ class FedMimic:
     """
     A Mimic becomes a FedMimic once the object or class becomes known
     """
+
     def __init__(self, recorder, husk):
         self.recorder = recorder
         self.deferred = TrueSight(husk)
