@@ -39,10 +39,8 @@ class TrueSight:
         return f"TrueSight object for {val}"
 
     def is_deferred_object(self):
-        return (
-            "Deferred"
-            in object.__getattribute__(self.obj, "__class__").__name__
-        )
+        cls_name = object.__getattribute__(self.obj, "__class__").__name__
+        return "Deferred" in cls_name
 
 
 def shape_shift(target, destination):

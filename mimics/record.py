@@ -45,10 +45,9 @@ class Record:
 
     def perform(self):
         result = self.handler()
-        if (
-            hasattr(self.return_deferred, "is_deferred_object")
-            and self.return_deferred.is_deferred_object()
-        ):
+        is_checkable = hasattr(self.return_deferred, "is_deferred_object")
+        is_deferred = self.return_deferred.is_deferred_object()
+        if is_checkable and is_deferred:
             self.return_deferred.subject = result
             shape_shift(self.return_deferred.subject, self.return_deferred.obj)
 
