@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.com/maarten-dp/mimics.svg?branch=master)](https://travis-ci.com/maarten-dp/mimics)
+[![codecov](https://codecov.io/gh/maarten-dp/mimics/branch/master/graph/badge.svg?token=PBYN5VAJVZ)](https://codecov.io/gh/maarten-dp/mimics)
+[![PyPI version](https://badge.fury.io/py/mimics.svg)](https://pypi.org/project/mimics/)
+
 # Introduction
 
 Mimic is a small tool with the intention to defer actions done on objects or classes. These actions can then be executed at a later date. It's main goal is to solve the chicken-and-egg design conundrum.
