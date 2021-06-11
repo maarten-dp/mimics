@@ -4,7 +4,7 @@
 
 # Introduction
 
-Mimic is a small tool with the intention to defer actions done on objects or classes. These actions can then be executed at a later date. It's main goal is to solve the chicken-and-egg design conundrum.
+Mimic is a tool with the intention to defer actions done on objects or classes. These actions can then be executed at a later date. It's main goal is to solve the chicken-and-egg design conundrum.
 
 **When you find yourself in a chicken-and-egg situation within your own code, it's most likely attributed to a sub-optimal project design.
 If this is the case, it's probably advisable to rethink your project structure.**
@@ -39,7 +39,7 @@ assert (result == 8) is True
 ```
 
 # A more elaborate example
-This example won't make much sense, as Flask-SQLAlchemy plays quite nicely when it comes to having control over the local scope while still performing global actions, but I thought it was a nice example of what the library is capable of. Here we'll defer the creation, initialization and persisting of an SQLAlchemy model.
+This example won't make much sense, as Flask-SQLAlchemy plays quite nicely when it comes to having control over the local scope while still performing global actions, but I thought it was a nice example of what the library is capable of. Here we'll defer the creation, initialization and persistence of an SQLAlchemy model.
 
 Once we've done all we wanted, we can play it whenever it suits us best.
 
@@ -88,7 +88,7 @@ Once you're ready to play your deferred actions, bringing it to an unsuspended s
 
 # Pitfalls
 ## Proxy object
-Because this library is not doing black magic (or at least, not an aweful lot 😉), it's important to know that any subject that the `Deferred` object shadows, will never ***truly*** be itself after unsuspending. We're not manipulating the virtual memory, manipulating local and global variables or patching imported modules (mind you, I've thought about it).
+Because this library is not doing black magic (or at least, not an aweful lot 😉), it's important to know that any subject that the `Deferred` object shadows, will never ***truly*** be itself after unsuspending. We're not manipulating the virtual memory, manipulating local and global variables or patching imported modules (mind you, I've thought about it), as that distorts readability and the ability to follow the exection flow.
 
 While it may look like you're interacting with the subject itself, you'll always be interacting with a proxy object that looks and feels like its subject. As such, some kinks might pop up in certain cases (cfr. BIG FAT DISCLAIMER).
 
